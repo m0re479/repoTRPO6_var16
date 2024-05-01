@@ -1,0 +1,4 @@
+﻿  TRPO6_var16.cpp
+D:\Учёба\ТРПО\ТРПО лабы\ЛР 6-7\individualTaskTRPO\TRPO6_var16\TRPO6_var16.cpp(164,18): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  LINK : не найден или не выполнена сборка D:\Учёба\ТРПО\ТРПО лабы\ЛР 6-7\individualTaskTRPO\TRPO6_var16\x64\Debug\TRPO6_var16.exe при последней инкрементной компоновке; выполняется полная компоновка
+  TRPO6_var16.vcxproj -> D:\Учёба\ТРПО\ТРПО лабы\ЛР 6-7\individualTaskTRPO\TRPO6_var16\x64\Debug\TRPO6_var16.exe
