@@ -8,11 +8,14 @@
 #include <vector>
 using namespace std;
 
+class AquariumVisitor;
+
 class AquaticCreature { //Водные обитатели
 public:
     AquaticCreature() {}
     virtual ~AquaticCreature() {}
     virtual void print() = 0;
+    virtual void join(AquariumVisitor* visitor) = 0;
 };
 
 
@@ -40,6 +43,8 @@ public:
     void swim() {
         std::cout << "Плывёт карп " + this->name_ << std::endl;
     }
+
+    void join(AquariumVisitor* visitor);
 };
 
 class Catfish : public Fish { //Сом
@@ -59,6 +64,8 @@ public:
     void swim() {
         std::cout << "Плывёт сом " + this->name_ << std::endl;
     }
+
+    void join(AquariumVisitor* visitor);
 };
 
 class Pike : public Fish { //Щука
@@ -78,6 +85,8 @@ public:
     void swim() {
         std::cout << "Плывёт щука " + this->name_ << std::endl;
     }
+
+    void join(AquariumVisitor* visitor);
 };
 
 class Shellfish : public AquaticCreature { //Моллюск
@@ -103,6 +112,8 @@ public:
     void move() {
         std::cout << "Движется большая улитка " + this->name_ << std::endl;
     }
+
+    void join(AquariumVisitor* visitor);
 };
 
 class SmallSnail : public Shellfish { //Маленькая улитка
@@ -122,6 +133,8 @@ public:
     void move() {
         std::cout << "Движется маленькая улитка " + this->name_ << std::endl;
     }
+
+    void join(AquariumVisitor* visitor);
 };
 
 class Seaweed : public AquaticCreature { //Водоросли
@@ -145,6 +158,8 @@ public:
     void tearOff() {
         std::cout << "Оторвали водоросль " + this->name_ << std::endl;
     }
+
+    void join(AquariumVisitor* visitor);
 };
 
 class Aquarium {
@@ -168,6 +183,60 @@ public:
         std::cout << std::endl;
     }
 };
+
+//Создаём Visitor
+
+class AquariumVisitor {
+public:
+    virtual void visitCarp(Carp* carp) = 0;
+    virtual void visitCatfish(Catfish* catfish) = 0;
+    virtual void visitPike(Pike* pike) = 0;
+    virtual void visitLargeSnail(LargeSnail* largeSnail) = 0;
+    virtual void visitSmallSnail(SmallSnail* smallSnail) = 0;
+    virtual void visitSeaweed(Seaweed* seaweed) = 0;
+};
+
+//Конкретный визитор-счётчик
+class CountVisitor : public AquariumVisitor {
+    int count_;
+
+public:
+    CountVisitor() : count_(0) { }
+    int getCount() { return this->count_; }
+
+    void visitCarp(Carp* carp) { count_++; }
+    void visitCatfish(Catfish* catfish) { count_++; }
+    void visitPike(Pike* pike) { count_++; }
+    void visitLargeSnail(LargeSnail* largeSnail) { count_++; }
+    void visitSmallSnail(SmallSnail* smallSnail) { count_++; }
+    void visitSeaweed(Seaweed* seaweed) { count_++; }
+};
+
+//Добавим методы join в классы морских обитателей
+
+void Carp::join(AquariumVisitor* visitor) {
+    visitor->visitCarp(this);
+}
+
+void Catfish::join(AquariumVisitor* visitor) {
+    visitor->visitCatfish(this);
+}
+
+void Pike::join(AquariumVisitor* visitor) {
+    visitor->visitPike(this);
+}
+
+void LargeSnail::join(AquariumVisitor* visitor) {
+    visitor->visitLargeSnail(this);
+}
+
+void SmallSnail::join(AquariumVisitor* visitor) {
+    visitor->visitSmallSnail(this);
+}
+
+void Seaweed::join(AquariumVisitor* visitor) {
+    visitor->visitSeaweed(this);
+}
 
 
 int main()
@@ -199,6 +268,14 @@ int main()
     firstAquarium->newCreature(firstSSnail);
     firstAquarium->newCreature(firstSeaweed);
     firstAquarium->printCreatures();
+
+    //Проверка работы счётчика особей в аквариуме
+    CountVisitor firstCountVisitor;
+    for (AquaticCreature* creature : firstAquarium->getCreatures()) {
+        creature->join(&firstCountVisitor);
+    }
+    std::cout << "Количество особей в аквариуме: " << firstCountVisitor.getCount() << std::endl;
+
 
     return 0;
 }
