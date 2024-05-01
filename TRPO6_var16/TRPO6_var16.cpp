@@ -238,6 +238,30 @@ void Seaweed::join(AquariumVisitor* visitor) {
     visitor->visitSeaweed(this);
 }
 
+//Конкретный визитор для получения информации о составе аквариума
+class InfoVisitor : public AquariumVisitor {
+public:
+    InfoVisitor() { }
+   
+    void visitCarp(Carp* carp) { 
+        std::cout << "Здесь карп " << carp->getName() << std::endl;
+    }
+    void visitCatfish(Catfish* catfish) { 
+        std::cout << "Здесь сом " << catfish->getName() << std::endl;
+    }
+    void visitPike(Pike* pike) { 
+        std::cout << "Здесь щука " << pike->getName() << std::endl;
+    }
+    void visitLargeSnail(LargeSnail* largeSnail) { 
+        std::cout << "Здесь большая улитка " << largeSnail->getName() << std::endl;
+    }
+    void visitSmallSnail(SmallSnail* smallSnail) { 
+        std::cout << "Здесь маленькая улитка " << smallSnail->getName() << std::endl;
+    }
+    void visitSeaweed(Seaweed* seaweed) { 
+        std::cout << "Здесь водоросли " << seaweed->getName() << std::endl;
+    }
+};
 
 int main()
 {
@@ -270,12 +294,18 @@ int main()
     firstAquarium->printCreatures();
 
     //Проверка работы счётчика особей в аквариуме
-    CountVisitor firstCountVisitor;
+    /*CountVisitor firstCountVisitor;
     for (AquaticCreature* creature : firstAquarium->getCreatures()) {
         creature->join(&firstCountVisitor);
     }
-    std::cout << "Количество особей в аквариуме: " << firstCountVisitor.getCount() << std::endl;
+    std::cout << "Количество особей в аквариуме: " << firstCountVisitor.getCount() << std::endl;*/
 
+    //Проверка работы вывода информации об особях в аквариуме
+    InfoVisitor firstInfoVisitor;
+    std::cout << "Информация о содержимом аквариума: " << std::endl;
+    for (AquaticCreature* creature : firstAquarium->getCreatures()) {
+        creature->join(&firstInfoVisitor);
+    }
 
     return 0;
 }
